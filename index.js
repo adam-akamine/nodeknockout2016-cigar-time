@@ -1,14 +1,19 @@
 var express = require('express')
+var path = require('path');
 var app = express()
 var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
+var pug = require('pug');
+
 
 app.set('port', (process.env.PORT || 5000))
+app.set('views', path.resolve(__dirname, 'views'));
+app.set('view engine', 'pug');
 app.use(express.static(__dirname + '/public'))
 
 app.get('/', function(request, response) {
-  response.send('Hello from Node Knockout 2016!')
+  response.render('home');
 })
 
 app.get('/scrape', function (req, res) {
