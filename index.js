@@ -35,43 +35,48 @@ app.get('/scrape', function (req, res) {
       $('.Details').filter(function () {
         data = $(this);
 
-
         /* Get the blender of the cigar */
         var blender = getDetail(data, "Blender");
+        console.log("blender: " + blender);
         json.blender = blender;
 
         /* Get the shape of the cigar */
         var shape = getDetail(data, "Shape");
+        console.log("shape: " + shape);
         json.shape = shape;
+
+        /* Get the size of the cigar */
+        var size = getDetail(data, "Size");
+        console.log("size: " + size);
+        json.size = size;
       });
 
       function getDetail(data, detail) {
         console.log("Getting " + detail);
         var detailsArray = data.text().trim().split(/\s+/);
-        console.log(detailsArray);
         if(data.text().includes(detail + ":")) {
           var index = detailsArray.indexOf(detail + ":");
           var detailsArraySliced = detailsArray.slice(index + 1);
-          var end = 0;
+
           for(var i = 0; i < detailsArraySliced.length; i++) {
             if(detailsArraySliced[i].includes(":")) {
-              end = i;
+              var end = i;
               break;
             }
           }
 
           var slicedDetail = detailsArraySliced.slice(0, end);
-          console.log("slicedDetail: " + slicedDetail);
-          console.log(detail + ": " + slicedDetail.join(" "));
         }
         else {
-          console.log("No Shape found.");
+          console.log("Detail not found.");
         }
         return slicedDetail.join(" ");
       }
-    // fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err) {
-    //   console.log("File written");
-    // });
+
+    /* Store data into JSON file */
+    fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err) {
+      console.log("File written");
+    });
   }
   })
 
