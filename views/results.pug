@@ -1,0 +1,108 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    title Results
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    link(href="https://fonts.googleapis.com/css?family=Noto+Sans|Open+Sans", rel="stylesheet")
+    link(rel = 'stylesheet', href = '/css/index.css')
+  body
+    nav.navbar.navbar-default
+      .container-fluid
+        .navbar-header
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1', aria-expanded='false')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='#')
+        //- Collect the nav links, forms, and other content for toggling
+        #bs-example-navbar-collapse-1.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li
+              a(href='/')
+                | Home
+                span.sr-only (current)
+            li
+              a(href='/about.html') About
+
+    .container
+      hgroup.mb20
+        h1 Search Results
+        h2.lead
+          strong.text-danger 3
+          |  results were found for the search for
+          strong.text-danger Lorem
+      section.col-xs-12.col-sm-6.col-md-12
+        article.search-result.row
+          .col-xs-12.col-sm-12.col-md-3
+            a.thumbnail(href='#', title='Lorem ipsum')
+              img(src='http://lorempixel.com/250/140/people', alt='Lorem ipsum')
+          .col-xs-12.col-sm-12.col-md-2
+            ul.meta-search
+              li
+                i.glyphicon.glyphicon-calendar
+                span 02/15/2014
+              li
+                i.glyphicon.glyphicon-time
+                span 4:28 pm
+              li
+                i.glyphicon.glyphicon-tags
+                span People
+          .col-xs-12.col-sm-12.col-md-7.excerpet
+            h3
+              a(href='#', title='') Voluptatem, exercitationem, suscipit, distinctio
+            p
+              | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio, qui sapiente aspernatur molestiae non corporis magni sit sequi iusto debitis delectus doloremque.
+            span.plus
+              a(href='#', title='Lorem ipsum')
+                i.glyphicon.glyphicon-plus
+          span.clearfix.borda
+        article.search-result.row
+          .col-xs-12.col-sm-12.col-md-3
+            a.thumbnail(href='#', title='Lorem ipsum')
+              img(src='http://lorempixel.com/250/140/food', alt='Lorem ipsum')
+          .col-xs-12.col-sm-12.col-md-2
+            ul.meta-search
+              li
+                i.glyphicon.glyphicon-calendar
+                span 02/13/2014
+              li
+                i.glyphicon.glyphicon-time
+                span 8:32 pm
+              li
+                i.glyphicon.glyphicon-tags
+                span Food
+          .col-xs-12.col-sm-12.col-md-7
+            h3
+              a(href='#', title='') Voluptatem, exercitationem, suscipit, distinctio
+            p
+              | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio, qui sapiente aspernatur molestiae non corporis magni sit sequi iusto debitis delectus doloremque.
+            span.plus
+              a(href='#', title='Lorem ipsum')
+                i.glyphicon.glyphicon-plus
+          span.clearfix.borda
+        article.search-result.row
+          .col-xs-12.col-sm-12.col-md-3
+            a.thumbnail(href='#', title='Lorem ipsum')
+              img(src='http://lorempixel.com/250/140/sports', alt='Lorem ipsum')
+          .col-xs-12.col-sm-12.col-md-2
+            ul.meta-search
+              li
+                i.glyphicon.glyphicon-calendar
+                span 01/11/2014
+              li
+                i.glyphicon.glyphicon-time
+                span 10:13 am
+              li
+                i.glyphicon.glyphicon-tags
+                span Sport
+          .col-xs-12.col-sm-12.col-md-7
+            h3
+              a(href='#', title='') Voluptatem, exercitationem, suscipit, distinctio
+            p
+              | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio, qui sapiente aspernatur molestiae non corporis magni sit sequi iusto debitis delectus doloremque.
+            span.plus
+              a(href='#', title='Lorem ipsum')
+                i.glyphicon.glyphicon-plus
+          span.clearfix.border

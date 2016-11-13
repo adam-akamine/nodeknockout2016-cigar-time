@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+doctype html
 html(lang="en")
   head
     meta(charset="utf-8")
@@ -29,4 +29,13 @@ html(lang="en")
     .homeContainer
       .welcomeImage
         img.welcomeImage(src="/images/cigar-background.jpg")
-      .welcomeText Pick A Flavor:
+      .pickACigar
+        .welcomeText Select Your Cigar
+        form.searchByBrand
+          .form-group
+            input.form-control(placeholder="search by cigar brand")
+          .form-group
+            input.form-control(placeholder="search by cigar shape")
+          .form-group
+            input.form-control(placeholder="search by cigar size")
+          button.btn.btn-primary(type='submit') Submit

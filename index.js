@@ -16,21 +16,22 @@ app.get('/', function(request, response) {
   response.render('home');
 })
 
+app.get('/results', function (req, res) {
+  res.render('results');
+})
+
 app.get('/scrape', function (req, res) {
   url = "http://www.atlanticcigar.com/Singles/Illusione-Fume-D'Amour-Juniperos-Lancero-Single.asp";
 
   request(url, function (error, resonse, html) {
     if(!error) {
       var $ = cheerio.load(html);
-
       var name, blender, shape, size;
-
       var json = { name: "", blender: "", shape: "", size:""}
 
       /* Get the name of the cigar */
       $('.productHeader').filter(function () {
         var data = $(this);
-
         name = data.children().first().text();
       })
       console.log("name: " + name);
@@ -79,7 +80,7 @@ app.get('/scrape', function (req, res) {
       }
 
     /* Store data into JSON file */
-    fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err) {
+    fs.appendFile('output.json', JSON.stringify(json, null, 4), function(err) {
       console.log("File written");
     });
   }
