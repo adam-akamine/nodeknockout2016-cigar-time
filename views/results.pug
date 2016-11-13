@@ -32,7 +32,9 @@ html(lang="en")
         h2.lead
           strong.text-danger 3
           |  results were found for the search for
-          strong.text-danger Lorem
+          strong.text-danger &nbsp; #{cigarBrand}
+        h2.fromUrl from &nbsp;
+          a(href="http://www.atlanticcigar.com/cigars/" + cigarBrand.toLowerCase() + ".asp") Atlantic Cigars
       section.col-xs-12.col-sm-6.col-md-12
         article.search-result.row
           .col-xs-12.col-sm-12.col-md-3

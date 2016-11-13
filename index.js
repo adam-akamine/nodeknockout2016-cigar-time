@@ -5,12 +5,17 @@ var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
 var pug = require('pug');
+var bodyParser = require('body-parser');
 
 
 app.set('port', (process.env.PORT || 5000))
 app.set('views', path.resolve(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.use(express.static(__dirname + '/public'))
+app.use(bodyParser.urlencoded ({
+  extended: true
+}));
+app.use(bodyParser.json());
 
 app.get('/', function(request, response) {
   response.render('home');
@@ -18,106 +23,6 @@ app.get('/', function(request, response) {
 
 app.get('/results', function (req, res) {
   res.render('results');
-})
-
-app.get('/find/:brand', function (req, res) {
-  url = "http://www.atlanticcigar.com/shop-by-brand.aspx";
-  var alphaArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-  var brand = req.params.brand;
-  var firstChar = brand.charAt(0);
-  var detectNum = false;
-  var foundBrand = false;
-
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-  if(!isNaN(brand.charAt(0))) {
-    console.log("Numeric value " + firstChar + " at character index 0 detected.");
-    detectNum = true;
-  }
-  else {
-    firstChar = firstChar.toUpperCase();
-    brand = capitalizeFirstLetter(brand);
-    console.log("Searching for: " + brand);
-    detectNum = false;
-  }
-
-  request(url, function (error, response, html) {
-    if(!error) {
-      var $ = cheerio.load(html);
-      console.log("First char: " + firstChar);
-      // var alphaList = $('.list-brands li').children().first().children().eq(1);
-      var alphaList = 0;
-
-      var brandList = [];
-
-      if(detectNum) {
-        alphaList = $('.list-brands li').children().first().children();
-        console.log(alphaList.text());
-        console.log(alphaList.length);
-        for(var i = 0; i < alphaList.length; i++) {
-          brandList.push(alphaList.eq(i).text());
-        }
-        console.log(brandList);
-        if(brandList.indexOf(brand) > -1) {
-          foundBrand = true;
-        }
-        // brandArray = $('.list-brands').children().eq(0).text().trim().split(/\r?\n/);
-        // // console.log(brandArray);
-        // if(brandArray.indexOf(brand) > -1) {
-        //   foundBrand = true;
-        // }
-      }
-      else {
-        var index = alphaArray.indexOf(firstChar);
-        console.log("index: " + index);
-        alphaList = $('.list-brands li').children();
-        // alphaList = alphaList.first().children().eq(index + 2);
-        // console.log(alphaList.eq(index).text());
-        // console.log(alphaList.text().trim().replace(/ /g,''));
-        // console.log(alphaList.length);
-        for(var i = 0; i < alphaList.length; i++) {
-          brandList.push(alphaList.eq(i).text());
-        }
-        // console.log(brandList);
-        if(brandList.indexOf(brand) > -1) {
-          foundBrand = true;
-        }
-        // brandArray = $('.list-brands').children().eq(index + 3).text().trim().split(/\r?\n/);
-        // console.log(brandArray);
-        // if(brandArray.indexOf(brand) > -1) {
-        //   foundBrand = true;
-        // }
-      }
-
-      // $('.list-brands').find('li').filter(function () {
-      //   var data = $(this);
-      //   // console.log("searching for " + brand);
-
-      //   // console.log(data.children().text());
-      //   if(data.children().text().includes(brand)) {
-      //     var foundBrand = true;
-      //   }
-      // })
-
-      if(foundBrand) {
-        console.log("Found brand!");
-        var cigarUrl = "http://www.atlanticcigar.com/cigars/" + brand.toLowerCase().replace(/ /g, "-").replace("#", "") + ".asp";
-        console.log(cigarUrl);
-      }
-      else {
-        console.log("Brand not found");
-      }
-
-
-    }
-
-    else {
-      throw error;
-    }
-
-    res.send("done searching");
-  })
 })
 
 app.get('/scrape', function (req, res) {
@@ -179,8 +84,6 @@ app.get('/scrape', function (req, res) {
         return slicedDetail.join(" ");
       }
 
-
-
     /* Store data into JSON file */
     fs.appendFile('output.json', JSON.stringify(json, null, 4), function(err) {
       console.log("File written");
@@ -193,6 +96,80 @@ app.get('/scrape', function (req, res) {
   })
 
   res.send("Done scraping.");
+})
+
+app.post('/', function(req, res, next) {
+  var alphaArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  var url = "http://www.atlanticcigar.com/shop-by-brand.aspx";
+  var brand = req.body.cigarBrand;
+  var firstChar = brand.charAt(0);
+  var detectNum = false;
+  var foundBrand = false;
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  if(!isNaN(brand.charAt(0))) {
+    console.log("Numeric value " + firstChar + " at character index 0 detected.");
+    detectNum = true;
+  }
+
+  request(url, function (error, response, html) {
+    if(!error) {
+      var $ = cheerio.load(html);
+      var alphaList = 0;
+      var brandList = [];
+
+      if(detectNum) {
+        alphaList = $('.list-brands li').children().first().children();
+        for(var i = 0; i < alphaList.length; i++) {
+          brandList.push(alphaList.eq(i).text());
+        }
+        for(var j = 0; j < brandList.length; j++) {
+          if(brandList[j].includes(brand)) {
+            foundBrand = true;
+          }
+        }
+      }
+      else {
+        var index = alphaArray.indexOf(firstChar) + 1;
+        if(index > 3 && index < 8) {
+          index++;
+        }
+        else if(index >= 8 && index < 13) {
+          index+=2;
+        }
+        else if(index >= 13 && index < 18) {
+          index+=3;
+        }
+        else if(index >= 18 && index < 23) {
+          index+=4;
+        }
+        else if(index >= 23 && index < 28) {
+          index+=5;
+        }
+        alphaList = $('.list-brands').children().eq(index).children();
+        console.log(alphaList.text());
+        console.log(alphaList.length);
+        if(alphaList.text().includes(brand)) {
+          foundBrand = true;
+        }
+      }
+
+      if(foundBrand) {
+        console.log("Found brand!");
+        var cigarUrl = "http://www.atlanticcigar.com/cigars/" + brand.toLowerCase().replace(/ /g, "-").replace("#", "") + ".asp";
+        res.render('results', {"cigarBrand": brand});
+      }
+      else {
+        console.log("Brand not found");
+        res.render('no-results', {"cigarBrand": brand});
+      }
+    }
+    else {
+      throw error;
+    }
+  })
 })
 
 app.listen(app.get('port'), function() {

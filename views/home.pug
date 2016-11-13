@@ -31,11 +31,11 @@ html(lang="en")
         img.welcomeImage(src="/images/cigar-background.jpg")
       .pickACigar
         .welcomeText Select Your Cigar
-        form.searchByBrand
+        form.searchByBrand(action = "/", method="POST")
           .form-group
-            input.form-control(placeholder="search by cigar brand")
+            input.form-control(placeholder="search by cigar brand", name="cigarBrand")
           .form-group
-            input.form-control(placeholder="search by cigar shape")
+            input.form-control(placeholder="search by cigar shape", name="cigarShape")
           .form-group
-            input.form-control(placeholder="search by cigar size")
+            input.form-control(placeholder="search by cigar size", name="cigarSize")
           button.btn.btn-primary(type='submit') Submit

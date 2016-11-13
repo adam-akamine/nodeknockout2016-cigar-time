@@ -14,6 +14,11 @@ $large: "only screen and (min-width: 1000px)";
     @content;
   }
 }
+@mixin medium {
+  @media #{$medium} {
+    @content;
+  }
+}
 @mixin large {
   @media #{$large} {
     @content;
