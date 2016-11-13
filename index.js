@@ -184,14 +184,19 @@ app.post('/', function(req, res, next) {
       if(!error) {
         var $ = cheerio.load(html);
         var name;
+        var details;
         var cigarList = [];
 
         $('.BrandBox .BrandStockBox').filter(function () {
           var data = $(this);
-
           name = data.children().first().text();
-          cigarList.push(name);
-          console.log(name);
+          details = data.children().eq(1).children().eq(1).children().eq(0).text();
+          // console.log(name);
+          // console.log(details);
+          cigarList.push({
+            name: name,
+            details: details
+          });
         })
         res.render('results', {"cigarBrand": brand, "cigarList": cigarList});
       }

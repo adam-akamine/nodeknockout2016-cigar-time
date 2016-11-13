@@ -37,4 +37,5 @@ html(lang="en")
         h2.fromUrl from &nbsp;
           a(href="http://www.atlanticcigar.com/cigars/" + cigarBrand.toLowerCase() + ".asp") Atlantic Cigars
         each val in cigarList
-          h2.listCigar #{val}
+          h2.cigarName #{val.name}
+          .cigarDetails #{val.details}
