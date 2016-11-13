@@ -157,9 +157,20 @@ app.post('/', function(req, res, next) {
         else {
           var index = alphaArray.indexOf(firstChar) + 1;
           alphaList = $('.list-brands').children().eq(index).children();
-          if(alphaList.text().toLowerCase().includes(brand.toLowerCase())) {
-            foundBrand = true;
-          }
+          var cigarBrands = [];
+          $('.list-brands').children().eq(index).children().filter(function () {
+            alphaList = $(this);
+            // console.log(alphaList.children().eq(1).text());
+            // console.log(alphaList.children().eq(index).text());
+            for(var i = 0; i < alphaList.children().length; i++) {
+              if(alphaList.children().eq(i).text().toLowerCase().includes(brand.toLowerCase())) {
+                foundBrand = true;
+                cigarBrands.push(alphaList.children().eq(i).text().toLowerCase());
+              }
+            }
+            console.log(cigarBrands);
+          })
+
         }
 
         if(foundBrand) {
@@ -196,7 +207,7 @@ app.post('/', function(req, res, next) {
           cigarLink = data.children().eq(1).children().eq(0).children().first().attr('href');
           cigarImage = data.children().eq(1).children().eq(0).children().first().children().first().attr('src');
           cigarImage = cigarImage.slice(2);
-          console.log(cigarImage);
+          // console.log(cigarImage);
           // console.log(name);
           // console.log(details);
           cigarList.push({

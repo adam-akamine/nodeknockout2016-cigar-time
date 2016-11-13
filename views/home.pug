@@ -23,8 +23,6 @@ html(lang="en")
               a(href='/')
                 | Home
                 span.sr-only (current)
-            li
-              a(href='/about.html') About
 
     .homeContainer
       .welcomeImage
@@ -34,8 +32,8 @@ html(lang="en")
         form.searchByBrand(action = "/", method="POST")
           .form-group
             input.form-control(placeholder="search by cigar brand", name="cigarBrand")
-          .form-group
-            input.form-control(placeholder="search by cigar shape", name="cigarShape")
-          .form-group
-            input.form-control(placeholder="search by cigar size", name="cigarSize")
+          //- .form-group
+          //-   input.form-control(placeholder="search by cigar shape", name="cigarShape")
+          //- .form-group
+          //-   input.form-control(placeholder="search by cigar size", name="cigarSize")
           button.btn.btn-primary(type='submit') Submit
