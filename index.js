@@ -39,22 +39,39 @@ app.get('/find/:brand', function (req, res) {
     firstChar = firstChar.toUpperCase();
     brand = capitalizeFirstLetter(brand);
     console.log("Searching for: " + brand);
+    detectNum = false;
   }
 
   request(url, function (error, response, html) {
     if(!error) {
       var $ = cheerio.load(html);
-      var secondChild = $('.list-brands').children().eq(1);
-      console.log(secondChild.text());
-      $('.list-brands').find('li').filter(function () {
-        var data = $(this);
-        // console.log("searching for " + brand);
-
-        // console.log(data.children().text());
-        if(data.children().text().includes(brand)) {
-          var foundBrand = true;
+      console.log("First char: " + firstChar);
+      var brandArray = 0;
+      if(detectNum) {
+        brandArray = $('.list-brands').children().eq(0).text().trim().split(/\s+/);
+        console.log(brandArray);
+        if(brandArray.indexOf(brand) > -1) {
+          foundBrand = true;
         }
-      })
+      }
+      else {
+        var index = alphaArray.indexOf(firstChar);
+        brandArray = $('.list-brands').children().eq(index + 3).text().trim().split(/\s+/);
+        console.log(brandArray);
+        if(brandArray.indexOf(brand) > -1) {
+          foundBrand = true;
+        }
+      }
+
+      // $('.list-brands').find('li').filter(function () {
+      //   var data = $(this);
+      //   // console.log("searching for " + brand);
+
+      //   // console.log(data.children().text());
+      //   if(data.children().text().includes(brand)) {
+      //     var foundBrand = true;
+      //   }
+      // })
 
       if(foundBrand) {
         console.log("Found brand!");
