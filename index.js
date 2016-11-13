@@ -46,21 +46,48 @@ app.get('/find/:brand', function (req, res) {
     if(!error) {
       var $ = cheerio.load(html);
       console.log("First char: " + firstChar);
-      var brandArray = 0;
+      // var alphaList = $('.list-brands li').children().first().children().eq(1);
+      var alphaList = 0;
+
+      var brandList = [];
+
       if(detectNum) {
-        brandArray = $('.list-brands').children().eq(0).text().trim().split(/\s+/);
-        console.log(brandArray);
-        if(brandArray.indexOf(brand) > -1) {
+        alphaList = $('.list-brands li').children().first().children();
+        console.log(alphaList.text());
+        console.log(alphaList.length);
+        for(var i = 0; i < alphaList.length; i++) {
+          brandList.push(alphaList.eq(i).text());
+        }
+        console.log(brandList);
+        if(brandList.indexOf(brand) > -1) {
           foundBrand = true;
         }
+        // brandArray = $('.list-brands').children().eq(0).text().trim().split(/\r?\n/);
+        // // console.log(brandArray);
+        // if(brandArray.indexOf(brand) > -1) {
+        //   foundBrand = true;
+        // }
       }
       else {
         var index = alphaArray.indexOf(firstChar);
-        brandArray = $('.list-brands').children().eq(index + 3).text().trim().split(/\s+/);
-        console.log(brandArray);
-        if(brandArray.indexOf(brand) > -1) {
+        console.log("index: " + index);
+        alphaList = $('.list-brands li').children();
+        // alphaList = alphaList.first().children().eq(index + 2);
+        // console.log(alphaList.eq(index).text());
+        // console.log(alphaList.text().trim().replace(/ /g,''));
+        // console.log(alphaList.length);
+        for(var i = 0; i < alphaList.length; i++) {
+          brandList.push(alphaList.eq(i).text());
+        }
+        // console.log(brandList);
+        if(brandList.indexOf(brand) > -1) {
           foundBrand = true;
         }
+        // brandArray = $('.list-brands').children().eq(index + 3).text().trim().split(/\r?\n/);
+        // console.log(brandArray);
+        // if(brandArray.indexOf(brand) > -1) {
+        //   foundBrand = true;
+        // }
       }
 
       // $('.list-brands').find('li').filter(function () {
@@ -75,6 +102,8 @@ app.get('/find/:brand', function (req, res) {
 
       if(foundBrand) {
         console.log("Found brand!");
+        var cigarUrl = "http://www.atlanticcigar.com/cigars/" + brand.toLowerCase().replace(/ /g, "-").replace("#", "") + ".asp";
+        console.log(cigarUrl);
       }
       else {
         console.log("Brand not found");
