@@ -185,20 +185,29 @@ app.post('/', function(req, res, next) {
         var $ = cheerio.load(html);
         var name;
         var details;
+        var cigarImage;
+        var cigarLink;
         var cigarList = [];
 
         $('.BrandBox .BrandStockBox').filter(function () {
           var data = $(this);
           name = data.children().first().text();
           details = data.children().eq(1).children().eq(1).children().eq(0).text();
+          cigarLink = data.children().eq(1).children().eq(0).children().first().attr('href');
+          cigarImage = data.children().eq(1).children().eq(0).children().first().children().first().attr('src');
+          console.log(cigarImage);
           // console.log(name);
           // console.log(details);
           cigarList.push({
             name: name,
-            details: details
+            details: details,
+            cigarLink: cigarLink
           });
         })
-        res.render('results', {"cigarBrand": brand, "cigarList": cigarList});
+        res.render('results', {
+          "cigarBrand": brand,
+          "cigarList": cigarList
+        });
       }
       else {
         throw error;
