@@ -68,8 +68,7 @@ table {
 body {
   font-family: 'Open Sans', sans-serif;
   background-color: black;
-  color: white;
-  overflow: hidden; }
+  color: white; }
 
 .navbar-default {
   margin: 0 auto;

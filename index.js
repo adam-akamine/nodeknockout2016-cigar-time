@@ -195,13 +195,15 @@ app.post('/', function(req, res, next) {
           details = data.children().eq(1).children().eq(1).children().eq(0).text();
           cigarLink = data.children().eq(1).children().eq(0).children().first().attr('href');
           cigarImage = data.children().eq(1).children().eq(0).children().first().children().first().attr('src');
+          cigarImage = cigarImage.slice(2);
           console.log(cigarImage);
           // console.log(name);
           // console.log(details);
           cigarList.push({
             name: name,
             details: details,
-            cigarLink: cigarLink
+            cigarLink: cigarLink,
+            cigarImage: cigarImage
           });
         })
         res.render('results', {
