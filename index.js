@@ -99,10 +99,11 @@ app.get('/scrape', function (req, res) {
 })
 
 app.post('/', function(req, res, next) {
-  var alphaArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  var alphaArray = ['A', 'B', 'C', null, 'D', 'E', 'F', 'G', null, 'H', 'I', 'J', 'K', null, 'L', 'M', 'N', 'O', null, 'P', 'Q', 'R', 'S', null, 'T', 'U', 'V', 'W', null, 'X', 'Y', 'Z'];
   var url = "http://www.atlanticcigar.com/shop-by-brand.aspx";
   var brand = req.body.cigarBrand;
-  var firstChar = brand.charAt(0);
+  console.log("Searching for brand: " + brand);
+  var firstChar = brand.charAt(0).toUpperCase();
   var detectNum = false;
   var foundBrand = false;
 
@@ -126,32 +127,38 @@ app.post('/', function(req, res, next) {
           brandList.push(alphaList.eq(i).text());
         }
         for(var j = 0; j < brandList.length; j++) {
-          if(brandList[j].includes(brand)) {
+          if(brandList[j].toLowerCase().includes(brand.toLowerCase())) {
             foundBrand = true;
           }
         }
       }
       else {
         var index = alphaArray.indexOf(firstChar) + 1;
-        if(index > 3 && index < 8) {
-          index++;
-        }
-        else if(index >= 8 && index < 13) {
-          index+=2;
-        }
-        else if(index >= 13 && index < 18) {
-          index+=3;
-        }
-        else if(index >= 18 && index < 23) {
-          index+=4;
-        }
-        else if(index >= 23 && index < 28) {
-          index+=5;
-        }
+        // if(index > 3 && index <= 7) {
+        //   index++;
+        //   console.log("Adding 1 to index");
+        // }
+        // else if(index > 7 && index <= 12) {
+        //   index+=2;
+        //   console.log("Adding 2 to index");
+
+        // }
+        // else if(index > 12 && index <= 17) {
+        //   index+=3;
+        //   console.log("Adding 3 to index");
+
+        // }
+        // else if(index > 17 && index <= 22) {
+        //   index+=4;
+        // }
+        // else if(index > 22 && index <= 27) {
+        //   index+=5;
+        // }
+        console.log("index: " + index);
         alphaList = $('.list-brands').children().eq(index).children();
         console.log(alphaList.text());
         console.log(alphaList.length);
-        if(alphaList.text().includes(brand)) {
+        if(alphaList.text().toLowerCase().includes(brand.toLowerCase())) {
           foundBrand = true;
         }
       }
