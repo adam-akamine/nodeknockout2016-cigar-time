@@ -27,10 +27,11 @@ html(lang="en")
               a(href='/about.html') About
 
     .container
+      - var cigarListLength = cigarList.length;
       hgroup.mb20
         h1 Search Results
         h2.lead
-          strong.text-danger x
+          strong.text-danger #{cigarListLength}
           |  results were found for the search for
           strong.text-danger &nbsp; #{cigarBrand}
         h2.fromUrl from &nbsp;
