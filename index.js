@@ -111,72 +111,144 @@ app.post('/', function(req, res, next) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
   if(!isNaN(brand.charAt(0))) {
-    console.log("Numeric value " + firstChar + " at character index 0 detected.");
     detectNum = true;
   }
 
-  request(url, function (error, response, html) {
-    if(!error) {
-      var $ = cheerio.load(html);
-      var alphaList = 0;
-      var brandList = [];
+  function getDetail(data, detail) {
+    console.log("Getting " + detail);
+    var detailsArray = data.text().trim().split(/\s+/);
+    if(data.text().includes(detail + ":")) {
+      var index = detailsArray.indexOf(detail + ":");
+      var detailsArraySliced = detailsArray.slice(index + 1);
 
-      if(detectNum) {
-        alphaList = $('.list-brands li').children().first().children();
-        for(var i = 0; i < alphaList.length; i++) {
-          brandList.push(alphaList.eq(i).text());
+      for(var i = 0; i < detailsArraySliced.length; i++) {
+        if(detailsArraySliced[i].includes(":")) {
+          var end = i;
+          break;
         }
-        for(var j = 0; j < brandList.length; j++) {
-          if(brandList[j].toLowerCase().includes(brand.toLowerCase())) {
+      }
+
+      var slicedDetail = detailsArraySliced.slice(0, end);
+    }
+    else {
+      console.log("Detail not found.");
+    }
+    return slicedDetail.join(" ");
+  }
+
+  var findRequest = function(url) {
+    request(url, function (error, response, html) {
+      if(!error) {
+        var $ = cheerio.load(html);
+        var alphaList = 0;
+        var brandList = [];
+
+        if(detectNum) {
+          alphaList = $('.list-brands li').children().first().children();
+          for(var i = 0; i < alphaList.length; i++) {
+            brandList.push(alphaList.eq(i).text());
+          }
+          for(var j = 0; j < brandList.length; j++) {
+            if(brandList[j].toLowerCase().includes(brand.toLowerCase())) {
+              foundBrand = true;
+            }
+          }
+        }
+        else {
+          var index = alphaArray.indexOf(firstChar) + 1;
+          alphaList = $('.list-brands').children().eq(index).children();
+          if(alphaList.text().toLowerCase().includes(brand.toLowerCase())) {
             foundBrand = true;
           }
         }
-      }
-      else {
-        var index = alphaArray.indexOf(firstChar) + 1;
-        // if(index > 3 && index <= 7) {
-        //   index++;
-        //   console.log("Adding 1 to index");
-        // }
-        // else if(index > 7 && index <= 12) {
-        //   index+=2;
-        //   console.log("Adding 2 to index");
 
-        // }
-        // else if(index > 12 && index <= 17) {
-        //   index+=3;
-        //   console.log("Adding 3 to index");
-
-        // }
-        // else if(index > 17 && index <= 22) {
-        //   index+=4;
-        // }
-        // else if(index > 22 && index <= 27) {
-        //   index+=5;
-        // }
-        console.log("index: " + index);
-        alphaList = $('.list-brands').children().eq(index).children();
-        console.log(alphaList.text());
-        console.log(alphaList.length);
-        if(alphaList.text().toLowerCase().includes(brand.toLowerCase())) {
-          foundBrand = true;
+        if(foundBrand) {
+          console.log("Found brand!");
+          var cigarUrl = "http://www.atlanticcigar.com/cigars/" + brand.toLowerCase().replace(/ /g, "-").replace("#", "") + ".asp";
+          scrape(cigarUrl, brand);
+          // res.render('results', {"cigarBrand": brand});
+        }
+        else {
+          console.log("Brand not found");
+          res.render('no-results', {"cigarBrand": brand});
         }
       }
+      else {
+        throw error;
+      }
+    })
+  }(url);
 
-      if(foundBrand) {
-        console.log("Found brand!");
-        var cigarUrl = "http://www.atlanticcigar.com/cigars/" + brand.toLowerCase().replace(/ /g, "-").replace("#", "") + ".asp";
-        res.render('results', {"cigarBrand": brand});
+  var scrape = function(cigarUrl, brand) {
+    request(cigarUrl, function(error, response, html) {
+      if(!error) {
+        var $ = cheerio.load(html);
+        var name;
+        var cigarList = [];
+
+        $('.BrandBox .BrandStockBox').filter(function () {
+          var data = $(this);
+
+          name = data.children().first().text();
+          cigarList.push(name);
+          console.log(name);
+        })
+        res.render('results', {"cigarBrand": brand, "cigarList": cigarList});
       }
       else {
-        console.log("Brand not found");
-        res.render('no-results', {"cigarBrand": brand});
+        throw error;
       }
-    }
-    else {
-      throw error;
-    }
-  })
+    })
+  }
+
+  // var scrape = function(cigarUrl) {
+  //   request(url, function (error, resonse, html) {
+  //     if(!error) {
+  //       var $ = cheerio.load(html);
+  //       var name, blender, shape, size;
+  //       var json = { name: "", blender: "", shape: "", size:""}
+
+  //       /* Get the name of the cigar */
+  //       $('.productHeader').filter(function () {
+  //         var data = $(this);
+  //         name = data.children().first().text();
+  //       })
+  //       console.log("name: " + name);
+  //       json.name = name;
+
+  //       /* Get the blender of the cigar */
+  //       $('.Details').filter(function () {
+  //         data = $(this);
+
+  //         /* Get the blender of the cigar */
+  //         var blender = getDetail(data, "Blender");
+  //         console.log("blender: " + blender);
+  //         json.blender = blender;
+
+  //         /* Get the shape of the cigar */
+  //         var shape = getDetail(data, "Shape");
+  //         console.log("shape: " + shape);
+  //         json.shape = shape;
+
+  //         /* Get the size of the cigar */
+  //         var size = getDetail(data, "Size");
+  //         console.log("size: " + size);
+  //         json.size = size;
+  //       });
+
+  //       res.render('results', {
+  //         "cigarBrand": brand,
+  //         "blender": json.blender,
+  //         "shape": json.shape,
+  //         "size": json.size
+  //       });
+  //     }
+
+  //     else {
+  //       throw error;
+  //     }
+  //   })
+  // }
 })
 
 app.listen(app.get('port'), function() {
