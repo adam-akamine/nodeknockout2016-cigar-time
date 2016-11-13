@@ -20,6 +20,60 @@ app.get('/results', function (req, res) {
   res.render('results');
 })
 
+app.get('/find/:brand', function (req, res) {
+  url = "http://www.atlanticcigar.com/shop-by-brand.aspx";
+  var alphaArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  var brand = req.params.brand;
+  var firstChar = brand.charAt(0);
+  var detectNum = false;
+  var foundBrand = false;
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  if(!isNaN(brand.charAt(0))) {
+    console.log("Numeric value " + firstChar + " at character index 0 detected.");
+    detectNum = true;
+  }
+  else {
+    firstChar = firstChar.toUpperCase();
+    brand = capitalizeFirstLetter(brand);
+    console.log("Searching for: " + brand);
+  }
+
+  request(url, function (error, response, html) {
+    if(!error) {
+      var $ = cheerio.load(html);
+      var secondChild = $('.list-brands').children().eq(1);
+      console.log(secondChild.text());
+      $('.list-brands').find('li').filter(function () {
+        var data = $(this);
+        // console.log("searching for " + brand);
+
+        // console.log(data.children().text());
+        if(data.children().text().includes(brand)) {
+          var foundBrand = true;
+        }
+      })
+
+      if(foundBrand) {
+        console.log("Found brand!");
+      }
+      else {
+        console.log("Brand not found");
+      }
+
+
+    }
+
+    else {
+      throw error;
+    }
+
+    res.send("done searching");
+  })
+})
+
 app.get('/scrape', function (req, res) {
   url = "http://www.atlanticcigar.com/Singles/Illusione-Fume-D'Amour-Juniperos-Lancero-Single.asp";
 
@@ -79,10 +133,16 @@ app.get('/scrape', function (req, res) {
         return slicedDetail.join(" ");
       }
 
+
+
     /* Store data into JSON file */
     fs.appendFile('output.json', JSON.stringify(json, null, 4), function(err) {
       console.log("File written");
     });
+  }
+
+  else {
+    throw error;
   }
   })
 

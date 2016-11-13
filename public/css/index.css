@@ -68,6 +68,7 @@ table {
 body {
   font-family: 'Open Sans', sans-serif;
   background-color: black;
+  color: white;
   overflow: hidden; }
 
 .navbar-default {
@@ -121,14 +122,14 @@ hgroup {
   border-bottom: 1px solid #ccc; }
 
 hgroup h1 {
-  font: 500 normal 1.625em "Roboto",Arial,Verdana,sans-serif;
-  color: #2a3644;
+  font: 5010 normal 1.625em "Roboto",Arial,Verdana,sans-serif;
+  color: white;
   margin-top: 0;
   line-height: 1.15; }
 
 hgroup h2.lead {
   font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif;
-  color: #2a3644;
+  color: white;
   margin: 0;
   padding-bottom: 10px; }
 
@@ -165,7 +166,7 @@ hgroup h2.lead {
   margin-bottom: 10px !important; }
 
 .search-result h3 > a, .search-result i {
-  color: #248dc1 !important; }
+  color: gray !important; }
 
 .search-result p {
   font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; }

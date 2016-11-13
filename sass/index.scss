@@ -6,6 +6,7 @@
 body {
   font-family: 'Open Sans', sans-serif;
   background-color: black;
+  color: white;
   // background: linear-gradient(to bottom, #36200b, saddlebrown);
   overflow: hidden;
 }
@@ -59,8 +60,8 @@ body {
 .mb20 { margin-bottom: 20px; }
 
 hgroup { padding-left: 15px; border-bottom: 1px solid #ccc; }
-hgroup h1 { font: 500 normal 1.625em "Roboto",Arial,Verdana,sans-serif; color: #2a3644; margin-top: 0; line-height: 1.15; }
-hgroup h2.lead { font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; color: #2a3644; margin: 0; padding-bottom: 10px; }
+hgroup h1 { font: 5010 normal 1.625em "Roboto",Arial,Verdana,sans-serif; color: white; margin-top: 0; line-height: 1.15; }
+hgroup h2.lead { font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; color: white; margin: 0; padding-bottom: 10px; }
 
 .search-result .thumbnail { border-radius: 0 !important; }
 .search-result:first-child { margin-top: 0 !important; }
@@ -71,7 +72,7 @@ hgroup h2.lead { font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; 
 .search-result ul li i { padding-right: 5px; }
 .search-result .col-md-7 { position: relative; }
 .search-result h3 { font: 500 normal 1.375em "Roboto",Arial,Verdana,sans-serif; margin-top: 0 !important; margin-bottom: 10px !important; }
-.search-result h3 > a, .search-result i { color: #248dc1 !important; }
+.search-result h3 > a, .search-result i { color: gray !important; }
 .search-result p { font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; }
 .search-result span.plus { position: absolute; right: 0; top: 126px; }
 .search-result span.plus a { background-color: #248dc1; padding: 5px 5px 3px 5px; }
